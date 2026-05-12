@@ -1071,7 +1071,9 @@ ul {
         height: 100vh;
         background: #ffffff;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
+        padding-top: 100px;
+        gap: 2.5rem;
         transition: var(--transition);
         box-shadow: -10px 0 40px rgba(29, 45, 90, 0.15);
         border-left: 2px solid rgba(0, 180, 200, 0.15);
@@ -1095,7 +1097,19 @@ ul {
 
 @media (max-width: 576px) {
     .hero-title { font-size: 2.2rem; }
-    .hero-stats { flex-direction: column; gap: 1.5rem; }
+    .hero-stats { 
+        flex-direction: row; 
+        gap: 1rem; 
+        justify-content: center;
+        width: 100%;
+        padding: 0 10px;
+    }
+    .stat-item {
+        flex: 1;
+        text-align: center;
+    }
+    .stat-number { font-size: 1.4rem; }
+    .stat-text { font-size: 0.65rem; }
     .timeline::before { left: 10px; }
     .timeline-dot { left: 1px; }
     .timeline-item { padding-left: 40px; }
@@ -1182,13 +1196,24 @@ ul {
 
 @media (max-width: 768px) {
     .floating-actions {
-        bottom: 20px;
-        right: 20px;
-        gap: 12px;
+        bottom: 15px;
+        right: 15px;
+        gap: 10px;
     }
     .float-btn {
-        width: 50px;
-        height: 50px;
-        font-size: 1.5rem;
+        width: 48px;
+        height: 48px;
+        font-size: 1.3rem;
+    }
+    .partner-logo {
+        width: 180px;
+        height: 180px;
+        padding: 1.5rem;
+        border-radius: 16px;
+    }
+    .partner-name {
+        font-size: 0.95rem;
+        min-height: auto;
+        max-width: 180px;
     }
 }
