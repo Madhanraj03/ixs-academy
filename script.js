@@ -57,6 +57,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
+    // Counter Animation Logic
+    const animateCounter = (el) => {
+        const target = parseInt(el.getAttribute('data-target'));
+        const suffix = el.getAttribute('data-suffix') || '';
+        const duration = 2000; // 2 seconds
+        const startTime = Date.now();
+        
+        const updateCounter = () => {
+            const currentTime = Date.now();
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Easing function for smoother finish
+            const easeOutQuad = t => t * (2 - t);
+            const currentCount = Math.floor(easeOutQuad(progress) * target);
+            
+            el.innerText = currentCount + suffix;
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateCounter);
+            } else {
+                el.innerText = target + suffix;
+            }
+        };
+        
+        requestAnimationFrame(updateCounter);
+    };
+
     // Apply animation starting state to elements
     const animatedElements = document.querySelectorAll('.feature-card, .program-card, .timeline-content');
     animatedElements.forEach(el => {
@@ -65,4 +93,17 @@ document.addEventListener('DOMContentLoaded', () => {
         el.style.transition = 'all 0.6s ease-out';
         observer.observe(el);
     });
+
+    // Observe stat numbers for counter animation
+    const statNumbers = document.querySelectorAll('.stat-number');
+    statNumbers.forEach(num => {
+        const statObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                animateCounter(num);
+                statObserver.unobserve(num);
+            }
+        }, { threshold: 0.5 });
+        statObserver.observe(num);
+    });
 });
+
