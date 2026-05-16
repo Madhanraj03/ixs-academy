@@ -58,10 +58,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }, observerOptions);
 
     // Counter Animation Logic
-    const animateCounter = (el) => {
+    const animateCounter = (el, callback) => {
         const target = parseInt(el.getAttribute('data-target'));
         const suffix = el.getAttribute('data-suffix') || '';
         const duration = 2000; // 2 seconds
+        
+        // Reset to 0 before starting
+        el.innerText = '0' + suffix;
+        
         const startTime = Date.now();
         
         const updateCounter = () => {
@@ -79,10 +83,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 requestAnimationFrame(updateCounter);
             } else {
                 el.innerText = target + suffix;
+                if (callback) callback();
             }
         };
         
         requestAnimationFrame(updateCounter);
+    };
+
+    // Loop the counter every 10 seconds after finishing
+    const startCounterLoop = (el) => {
+        if (el.dataset.loopStarted) return;
+        el.dataset.loopStarted = "true";
+        
+        const run = () => {
+            animateCounter(el, () => {
+                setTimeout(run, 10000); // Wait exactly 10 seconds after ending
+            });
+        };
+        run();
     };
 
     // Apply animation starting state to elements
@@ -99,8 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
     statNumbers.forEach(num => {
         const statObserver = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
-                animateCounter(num);
-                statObserver.unobserve(num);
+                startCounterLoop(num);
+                // We keep observing if we want it to pause when not visible, 
+                // but the user asked for a simple 10s loop.
+                // However, to prevent multiple starts, we use the data-loop-started flag.
             }
         }, { threshold: 0.5 });
         statObserver.observe(num);
