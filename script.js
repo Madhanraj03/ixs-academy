@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mobile menu toggle
     const menuBtn = document.getElementById('mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
-    
+
     menuBtn.addEventListener('click', () => {
         navLinks.classList.toggle('active');
         // Simple animation for hamburger to X
@@ -62,23 +62,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = parseInt(el.getAttribute('data-target'));
         const suffix = el.getAttribute('data-suffix') || '';
         const duration = 2000; // 2 seconds
-        
+
         // Reset to 0 before starting
         el.innerText = '0' + suffix;
-        
+
         const startTime = Date.now();
-        
+
         const updateCounter = () => {
             const currentTime = Date.now();
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            
+
             // Easing function for smoother finish
             const easeOutQuad = t => t * (2 - t);
             const currentCount = Math.floor(easeOutQuad(progress) * target);
-            
+
             el.innerText = currentCount + suffix;
-            
+
             if (progress < 1) {
                 requestAnimationFrame(updateCounter);
             } else {
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (callback) callback();
             }
         };
-        
+
         requestAnimationFrame(updateCounter);
     };
 
@@ -94,10 +94,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const startCounterLoop = (el) => {
         if (el.dataset.loopStarted) return;
         el.dataset.loopStarted = "true";
-        
+
         const run = () => {
             animateCounter(el, () => {
-                setTimeout(run, 10000); // Wait exactly 10 seconds after ending
+                setTimeout(run, 4000); // Wait exactly 10 seconds after ending
             });
         };
         run();
